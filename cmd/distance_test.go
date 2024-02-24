@@ -64,11 +64,11 @@ func TestFindDistance(t *testing.T) {
 	}{
 		"Success": {
 			in: &pb.DistanceRequest{
-				Position1: &pb.MapPosition{Latitude: 44.4970717, Longitude: 11.3535314},
-				Position2: &pb.MapPosition{Latitude: 37.5257372, Longitude: 15.0702872}},
+				Position1: &pb.MapPosition{Latitude: 44.4969, Longitude: 11.356435},
+				Position2: &pb.MapPosition{Latitude: 37.525738, Longitude: 15.070287}},
 			expected: expectation{
 				out: &pb.DistanceResponse{
-					Distance: 42.1,
+					Distance: 1152629,
 				},
 				err: nil,
 			},
