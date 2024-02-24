@@ -22,7 +22,9 @@ type server struct {
 
 // `FindDistance` implements `distance.DistanceServer`
 func (s *server) FindDistance(ctx context.Context, in *pb.DistanceRequest) (*pb.DistanceResponse, error) {
-	log.Printf("Received: (%v, %v) (%v, %v)", in.GetLat1(), in.GetLon1(), in.GetLat2(), in.GetLon2())
+	var pos1 pb.MapPosition = *in.GetPosition1()
+	var pos2 pb.MapPosition = *in.GetPosition2()
+	log.Printf("Received: (%v, %v) (%v, %v)", pos1.GetLatitude(), pos1.GetLongitude(), pos2.GetLatitude(), pos2.GetLongitude())
 	return &pb.DistanceResponse{Distance: 42.1}, nil
 }
 

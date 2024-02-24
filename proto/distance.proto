@@ -11,13 +11,17 @@ service Distance
     rpc FindDistance(DistanceRequest) returns (DistanceResponse) {}
 }
 
+// Mesasage that refers to a map position tuple (latitude / longitude)
+message MapPosition {
+    float latitude = 1;
+    float longitude = 2;
+}
+
 // The request message containing two tuple of lat and lon
 message DistanceRequest
 {
-    float lat1 = 1;
-    float lon1 = 2;
-    float lat2 = 3;
-    float lon2 = 4;
+    MapPosition position1 = 1;
+    MapPosition position2 = 2;
 }
 
 // The response message containing the distance between the two positions in
