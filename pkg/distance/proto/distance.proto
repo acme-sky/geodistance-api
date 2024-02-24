@@ -12,7 +12,8 @@ service Distance
 }
 
 // Mesasage that refers to a map position tuple (latitude / longitude)
-message MapPosition {
+message MapPosition
+{
     float latitude = 1;
     float longitude = 2;
 }
@@ -28,5 +29,5 @@ message DistanceRequest
 // meters format
 message DistanceResponse
 {
-    float distance = 1;
+    int32 distance = 1;
 }
