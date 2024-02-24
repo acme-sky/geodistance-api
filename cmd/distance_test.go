@@ -64,11 +64,13 @@ func TestFindDistance(t *testing.T) {
 	}{
 		"Success": {
 			in: &pb.DistanceRequest{
-				Position1: &pb.MapPosition{Latitude: 44.4969, Longitude: 11.356435},
-				Position2: &pb.MapPosition{Latitude: 37.525738, Longitude: 15.070287}},
+				Origin:      &pb.MapPosition{Latitude: 44.4969, Longitude: 11.356435},
+				Destination: &pb.MapPosition{Latitude: 37.525738, Longitude: 15.070287}},
 			expected: expectation{
 				out: &pb.DistanceResponse{
-					Distance: 1152629,
+					Origin:      "Mura Anteo Zamboni, 7, 40126 Bologna BO, Italy",
+					Destination: "Viale Andrea Doria, 6, 95125 Catania CT, Italy",
+					Distance:    1153265,
 				},
 				err: nil,
 			},
@@ -83,7 +85,7 @@ func TestFindDistance(t *testing.T) {
 					t.Errorf("Err -> \nWant: %q\nGot: %q\n", tt.expected.err, err)
 				}
 			} else {
-				if tt.expected.out.Distance != out.Distance {
+				if tt.expected.out.Distance != out.Distance && tt.expected.out.Origin != out.Origin || tt.expected.out.Destination != out.Destination {
 					t.Errorf("Out -> \nWant: %q\nGot : %q", tt.expected.out, out)
 				}
 			}

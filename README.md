@@ -21,8 +21,8 @@ c := pb.NewDistanceClient(conn)
 ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 defer cancel()
 r, err := c.FindDistance(ctx, &pb.DistanceRequest{
-    Position1: &pb.MapPosition{Latitude: 44.4969, Longitude: 11.3564347},
-    Position2: &pb.MapPosition{Latitude: 37.5257372, Longitude: 15.0702872}})
+    Origin: &pb.MapPosition{Latitude: 44.4969, Longitude: 11.3564347},
+    Destination: &pb.MapPosition{Latitude: 37.5257372, Longitude: 15.0702872}})
 if err != nil {
     log.Fatalf("Could not find distance: %v", err)
 }

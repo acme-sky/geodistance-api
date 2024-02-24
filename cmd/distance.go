@@ -42,16 +42,16 @@ func GetMapsClient() *maps.Client {
 
 // `FindDistance` implements `distance.DistanceServer`
 func (s *server) FindDistance(ctx context.Context, in *pb.DistanceRequest) (*pb.DistanceResponse, error) {
-	var pos1 pb.MapPosition = *in.GetPosition1()
-	var pos2 pb.MapPosition = *in.GetPosition2()
-	log.Printf("Search distance between (%v, %v) and (%v, %v)", pos1.GetLatitude(), pos1.GetLongitude(), pos2.GetLatitude(), pos2.GetLongitude())
+	var origin pb.MapPosition = *in.GetOrigin()
+	var destination pb.MapPosition = *in.GetDestination()
+	log.Printf("Search distance between (%v, %v) and (%v, %v)", origin.GetLatitude(), origin.GetLongitude(), destination.GetLatitude(), destination.GetLongitude())
 
 	if mclient == nil {
 		mclient = GetMapsClient()
 	}
 	matrix := &maps.DistanceMatrixRequest{
-		Origins:      []string{fmt.Sprintf("%f,%f", pos1.GetLatitude(), pos1.GetLongitude())},
-		Destinations: []string{fmt.Sprintf("%f,%f", pos2.GetLatitude(), pos2.GetLongitude())},
+		Origins:      []string{fmt.Sprintf("%f,%f", origin.GetLatitude(), origin.GetLongitude())},
+		Destinations: []string{fmt.Sprintf("%f,%f", destination.GetLatitude(), destination.GetLongitude())},
 		Units:        maps.UnitsMetric,
 	}
 	resp, err := mclient.DistanceMatrix(context.Background(), matrix)
@@ -65,7 +65,7 @@ func (s *server) FindDistance(ctx context.Context, in *pb.DistanceRequest) (*pb.
 		distances = append(distances, int32(row.Elements[0].Distance.Meters))
 	}
 
-	return &pb.DistanceResponse{Distance: slices.Min(distances)}, nil
+	return &pb.DistanceResponse{Origin: resp.OriginAddresses[0], Destination: resp.DestinationAddresses[0], Distance: slices.Min(distances)}, nil
 }
 
 func main() {

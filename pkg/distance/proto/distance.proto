@@ -21,13 +21,15 @@ message MapPosition
 // The request message containing two tuple of lat and lon
 message DistanceRequest
 {
-    MapPosition position1 = 1;
-    MapPosition position2 = 2;
+    MapPosition origin = 1;
+    MapPosition destination = 2;
 }
 
 // The response message containing the distance between the two positions in
 // meters format
 message DistanceResponse
 {
-    int32 distance = 1;
+    string origin = 1;
+    string destination = 2;
+    int32 distance = 3;
 }
