@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option go_package = "github.com/acme-sky/geodistance-api/proto";
+
+package distance;
+
+// The definition for a distance service
+service Distance
+{
+    // Sends a distance value in meters
+    rpc GetDistance(DistanceRequest) returns (DistanceResponse) {}
+}
+
+// The request message containing two tuple of lat and lon
+message DistanceRequest
+{
+    float lat1 = 1;
+    float lon1 = 2;
+    float lat2 = 3;
+    float lon2 = 4;
+}
+
+// The response message containing the distance between the two positions in
+// meters format
+message DistanceResponse
+{
+    float distance = 1;
+}
