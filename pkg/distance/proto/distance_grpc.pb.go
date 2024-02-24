@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.21.12
-// source: proto/distance.proto
+// source: pkg/distance/proto/distance.proto
 
 package proto
 
@@ -103,5 +103,5 @@ var Distance_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/distance.proto",
+	Metadata: "pkg/distance/proto/distance.proto",
 }
