@@ -36,7 +36,6 @@ func GetMapsClient() *maps.Client {
 	if err != nil {
 		log.Fatalf("fatal error: %s", err)
 	}
-	fmt.Println("aaoo")
 
 	return client
 }
