@@ -7,7 +7,7 @@ import (
 	"log"
 	"net"
 
-	pb "github.com/acme-sky/geodistance-api/distance"
+	pb "github.com/acme-sky/geodistance-api/proto"
 	"google.golang.org/grpc"
 )
 
