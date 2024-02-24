@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DistanceClient interface {
 	// Sends a distance value in meters
-	GetDistance(ctx context.Context, in *DistanceRequest, opts ...grpc.CallOption) (*DistanceResponse, error)
+	FindDistance(ctx context.Context, in *DistanceRequest, opts ...grpc.CallOption) (*DistanceResponse, error)
 }
 
 type distanceClient struct {
@@ -34,9 +34,9 @@ func NewDistanceClient(cc grpc.ClientConnInterface) DistanceClient {
 	return &distanceClient{cc}
 }
 
-func (c *distanceClient) GetDistance(ctx context.Context, in *DistanceRequest, opts ...grpc.CallOption) (*DistanceResponse, error) {
+func (c *distanceClient) FindDistance(ctx context.Context, in *DistanceRequest, opts ...grpc.CallOption) (*DistanceResponse, error) {
 	out := new(DistanceResponse)
-	err := c.cc.Invoke(ctx, "/distance.Distance/GetDistance", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/distance.Distance/FindDistance", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func (c *distanceClient) GetDistance(ctx context.Context, in *DistanceRequest, o
 // for forward compatibility
 type DistanceServer interface {
 	// Sends a distance value in meters
-	GetDistance(context.Context, *DistanceRequest) (*DistanceResponse, error)
+	FindDistance(context.Context, *DistanceRequest) (*DistanceResponse, error)
 	mustEmbedUnimplementedDistanceServer()
 }
 
@@ -56,8 +56,8 @@ type DistanceServer interface {
 type UnimplementedDistanceServer struct {
 }
 
-func (UnimplementedDistanceServer) GetDistance(context.Context, *DistanceRequest) (*DistanceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetDistance not implemented")
+func (UnimplementedDistanceServer) FindDistance(context.Context, *DistanceRequest) (*DistanceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindDistance not implemented")
 }
 func (UnimplementedDistanceServer) mustEmbedUnimplementedDistanceServer() {}
 
@@ -72,20 +72,20 @@ func RegisterDistanceServer(s grpc.ServiceRegistrar, srv DistanceServer) {
 	s.RegisterService(&Distance_ServiceDesc, srv)
 }
 
-func _Distance_GetDistance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Distance_FindDistance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DistanceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DistanceServer).GetDistance(ctx, in)
+		return srv.(DistanceServer).FindDistance(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/distance.Distance/GetDistance",
+		FullMethod: "/distance.Distance/FindDistance",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DistanceServer).GetDistance(ctx, req.(*DistanceRequest))
+		return srv.(DistanceServer).FindDistance(ctx, req.(*DistanceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -98,8 +98,8 @@ var Distance_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*DistanceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetDistance",
-			Handler:    _Distance_GetDistance_Handler,
+			MethodName: "FindDistance",
+			Handler:    _Distance_FindDistance_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

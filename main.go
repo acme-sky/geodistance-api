@@ -20,8 +20,8 @@ type server struct {
 	pb.UnimplementedDistanceServer
 }
 
-// `GetDistance` implements `distance.DistanceServer`
-func (s *server) GetDistance(ctx context.Context, in *pb.DistanceRequest) (*pb.DistanceResponse, error) {
+// `FindDistance` implements `distance.DistanceServer`
+func (s *server) FindDistance(ctx context.Context, in *pb.DistanceRequest) (*pb.DistanceResponse, error) {
 	log.Printf("Received: (%v, %v) (%v, %v)", in.GetLat1(), in.GetLon1(), in.GetLat2(), in.GetLon2())
 	return &pb.DistanceResponse{Distance: 42.1}, nil
 }

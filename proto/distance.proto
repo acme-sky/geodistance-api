@@ -8,7 +8,7 @@ package distance;
 service Distance
 {
     // Sends a distance value in meters
-    rpc GetDistance(DistanceRequest) returns (DistanceResponse) {}
+    rpc FindDistance(DistanceRequest) returns (DistanceResponse) {}
 }
 
 // The request message containing two tuple of lat and lon
