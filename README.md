@@ -32,4 +32,4 @@ log.Printf("%d", r.GetDistance())
 ## Setup
 
 You need to set up `MAPS_KEY` env variable for `go run cmd/distance.go`.
-If you change something in `*.proto` files, please run `./generate.sh`.
+If you change something in `*.proto` files, please run `make proto`.
