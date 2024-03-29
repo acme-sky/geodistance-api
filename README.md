@@ -33,3 +33,13 @@ log.Printf("%d", r.GetDistance())
 
 You need to set up `MAPS_KEY` env variable for `go run cmd/distance.go`.
 If you change something in `*.proto` files, please run `make proto`.
+
+## Build
+
+You can use Docker for a fresh build.
+
+```
+docker build -t acmesky-geodistance-api .
+
+docker run -e MAPS_KEY=.... --name geodistance -p 50051:50051 acmesky-geodistance-api:latest
+```
