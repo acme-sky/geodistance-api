@@ -7,7 +7,8 @@ info in meters.
 
 ## Maps API
 
-The API key can be restricted to "Distance Matrix API" and "Directions API".
+The API key can be restricted to "Distance Matrix API", "Directions API" and
+"Gecoding API".
 
 ## gRPC
 
@@ -27,6 +28,21 @@ if err != nil {
     log.Fatalf("Could not find distance: %v", err)
 }
 log.Printf("%d", r.GetDistance())
+```
+
+Also, you can find the map position from an address:
+
+```go
+// ...
+c := pb.NewDistanceClient(conn)
+
+ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+defer cancel()
+r, err := c.FindGeometry(ctx, &pb.AddressRequest{Address: "Viale Andrea Doria 6, Catania"})
+if err != nil {
+    log.Fatalf("Could not find distance: %v", err)
+}
+log.Printf("%v", r)
 ```
 
 ## Setup

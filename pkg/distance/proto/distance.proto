@@ -9,6 +9,9 @@ service Distance
 {
     // Sends a distance value in meters
     rpc FindDistance(DistanceRequest) returns (DistanceResponse) {}
+
+    // Sends an address and returns a map position geometry
+    rpc FindGeometry(AddressRequest) returns (MapPosition) {}
 }
 
 // Mesasage that refers to a map position tuple (latitude / longitude)
@@ -32,4 +35,10 @@ message DistanceResponse
     string origin = 1;
     string destination = 2;
     int32 distance = 3;
+}
+
+// Address request
+message AddressRequest
+{
+    string address = 1;
 }

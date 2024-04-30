@@ -24,6 +24,8 @@ const _ = grpc.SupportPackageIsVersion7
 type DistanceClient interface {
 	// Sends a distance value in meters
 	FindDistance(ctx context.Context, in *DistanceRequest, opts ...grpc.CallOption) (*DistanceResponse, error)
+	// Sends an address and returns a map position geometry
+	FindGeometry(ctx context.Context, in *AddressRequest, opts ...grpc.CallOption) (*MapPosition, error)
 }
 
 type distanceClient struct {
@@ -43,12 +45,23 @@ func (c *distanceClient) FindDistance(ctx context.Context, in *DistanceRequest, 
 	return out, nil
 }
 
+func (c *distanceClient) FindGeometry(ctx context.Context, in *AddressRequest, opts ...grpc.CallOption) (*MapPosition, error) {
+	out := new(MapPosition)
+	err := c.cc.Invoke(ctx, "/distance.Distance/FindGeometry", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DistanceServer is the server API for Distance service.
 // All implementations must embed UnimplementedDistanceServer
 // for forward compatibility
 type DistanceServer interface {
 	// Sends a distance value in meters
 	FindDistance(context.Context, *DistanceRequest) (*DistanceResponse, error)
+	// Sends an address and returns a map position geometry
+	FindGeometry(context.Context, *AddressRequest) (*MapPosition, error)
 	mustEmbedUnimplementedDistanceServer()
 }
 
@@ -58,6 +71,9 @@ type UnimplementedDistanceServer struct {
 
 func (UnimplementedDistanceServer) FindDistance(context.Context, *DistanceRequest) (*DistanceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindDistance not implemented")
+}
+func (UnimplementedDistanceServer) FindGeometry(context.Context, *AddressRequest) (*MapPosition, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindGeometry not implemented")
 }
 func (UnimplementedDistanceServer) mustEmbedUnimplementedDistanceServer() {}
 
@@ -90,6 +106,24 @@ func _Distance_FindDistance_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Distance_FindGeometry_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddressRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DistanceServer).FindGeometry(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/distance.Distance/FindGeometry",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DistanceServer).FindGeometry(ctx, req.(*AddressRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Distance_ServiceDesc is the grpc.ServiceDesc for Distance service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -100,6 +134,10 @@ var Distance_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FindDistance",
 			Handler:    _Distance_FindDistance_Handler,
+		},
+		{
+			MethodName: "FindGeometry",
+			Handler:    _Distance_FindGeometry_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

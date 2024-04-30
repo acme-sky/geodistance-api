@@ -93,3 +93,43 @@ func TestFindDistance(t *testing.T) {
 		})
 	}
 }
+
+func TestFindGeometry(t *testing.T) {
+	ctx := context.Background()
+	client, closer := serv(ctx)
+	defer closer()
+
+	type expectation struct {
+		out *pb.MapPosition
+		err error
+	}
+
+	tests := map[string]struct {
+		in       *pb.AddressRequest
+		expected expectation
+	}{
+		"Success": {
+			in: &pb.AddressRequest{Address: "Viale Andrea Doria 6, Catania"},
+			expected: expectation{
+				out: &pb.MapPosition{Latitude: 37.525837, Longitude: 15.076788},
+				err: nil,
+			},
+		},
+	}
+
+	for scenario, tt := range tests {
+		t.Run(scenario, func(t *testing.T) {
+			out, err := client.FindGeometry(ctx, tt.in)
+			if err != nil {
+				if tt.expected.err.Error() != err.Error() {
+					t.Errorf("Err -> \nWant: %q\nGot: %q\n", tt.expected.err, err)
+				}
+			} else {
+				if tt.expected.out.Latitude != out.Latitude && tt.expected.out.Longitude != out.Longitude {
+					t.Errorf("Out -> \nWant: %q\nGot : %q", tt.expected.out, out)
+				}
+			}
+
+		})
+	}
+}

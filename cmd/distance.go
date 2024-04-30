@@ -68,6 +68,35 @@ func (s *server) FindDistance(ctx context.Context, in *pb.DistanceRequest) (*pb.
 	return &pb.DistanceResponse{Origin: resp.OriginAddresses[0], Destination: resp.DestinationAddresses[0], Distance: slices.Min(distances)}, nil
 }
 
+// `FindGeometry` implements `distance.DistanceServer`
+func (s *server) FindGeometry(ctx context.Context, in *pb.AddressRequest) (*pb.MapPosition, error) {
+	var address string = in.GetAddress()
+	log.Printf("Search geometry for %s", address)
+
+	if mclient == nil {
+		mclient = GetMapsClient()
+	}
+	geocoding := &maps.GeocodingRequest{
+		Address: address,
+	}
+	resp, err := mclient.Geocode(context.Background(), geocoding)
+	if err != nil {
+		log.Fatalf("fatal error: %s", err)
+	}
+
+	var geometries []maps.LatLng
+
+	for _, row := range resp {
+		geometries = append(geometries, row.Geometry.Location)
+	}
+
+	if len(geometries) < 1 {
+		log.Fatalf("can't find the geometry for %s", address)
+	}
+
+	return &pb.MapPosition{Latitude: float32(geometries[0].Lat), Longitude: float32(geometries[0].Lng)}, nil
+}
+
 func main() {
 	flag.Parse()
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
