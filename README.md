@@ -57,5 +57,5 @@ You can use Docker for a fresh build.
 ```
 docker build -t acmesky-geodistance-api .
 
-docker run -e MAPS_KEY=.... --name geodistance -p 50051:50051 acmesky-geodistance-api:latest
+docker run -e MAPS_KEY=.... --name geodistance -p 50051:50051 --network acmesky acmesky-geodistance-api:latest
 ```
